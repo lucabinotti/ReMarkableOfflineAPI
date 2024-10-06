@@ -27,7 +27,7 @@ class RemarkableAPI:
         """
         self.base_url = base_url
         self.timeout = timeout
-        self.old_tree = old_tree
+        self.old_tree = old_tree if old_tree else self.get_directory(dir_guid="/")
 
     def is_device_connected(self) -> bool:
         """
@@ -77,7 +77,7 @@ class RemarkableAPI:
                     case "CollectionType":
                         root_dir.append(Directory(
                             guid=item["ID"],
-                            name=item["VissibleName"],
+                            name=item["VissibleName"].encode("latin1").decode("utf-8"),
                             last_change=datetime.strptime(item["ModifiedClient"], "%Y-%m-%dT%H:%M:%S.%fZ"),
                             bookmarked=item["Bookmarked"],
                             children=self.get_directory(item["ID"])
@@ -85,7 +85,7 @@ class RemarkableAPI:
                     case "DocumentType":
                         root_dir.append(File(
                             guid=item["ID"],
-                            name=item["VissibleName"],
+                            name=item["VissibleName"].encode("latin1").decode("utf-8"),
                             last_change=datetime.strptime(item["ModifiedClient"], "%Y-%m-%dT%H:%M:%S.%fZ"),
                             bookmarked=item["Bookmarked"]
                         ))
@@ -115,7 +115,7 @@ class RemarkableAPI:
                         current_path = fd.children
                         dir_path = "/".join(dir_path.split("/")[1:])
                         break
-                    elif "/" not in dir_path and isinstance(fd, File):
+                    elif isinstance(fd, File) and "/" not in dir_path:
                         return fd.last_change < last_change
             else:
                 return True
