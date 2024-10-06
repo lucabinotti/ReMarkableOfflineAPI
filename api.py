@@ -1,9 +1,11 @@
 import os
+from textwrap import indent
+
 import requests
 import shutil
 from datetime import datetime
 from typing import List, Union
-from remarkable_offline_api.models import File, Directory
+from .models import File, Directory
 
 
 class RemarkableAPI:
@@ -126,19 +128,14 @@ class RemarkableAPI:
             directory: The Directory object or a list of File/Directory objects to print.
             indent_level: The current level of indentation for nested directories.
         """
-        indent = ' ' * (indent_level * 4)
-        if isinstance(directory, Directory):
-            print(f"{indent}[D] {directory.name}")
-            children = directory.children
-        else:
-            children = directory
-            indent_level -= 1
-
-        for item in children:
-            if isinstance(item, File):
-                print(f"{indent}    [F] {item.name}")
-            elif isinstance(item, Directory):
-                self.print_directory(item, indent_level + 1)
+        directory = [directory] if isinstance(directory, Directory) else directory
+        if isinstance(directory, list):
+            for item in directory:
+                if isinstance(item, File):
+                    print(f"{' ' * indent_level * 4}[F] {item.name}")
+                elif isinstance(item, Directory):
+                    print(f"[D] {item.name}")
+                    self.print_directory(item.children, indent_level + 1)
 
     def download_tree(self, tree: List[Union[File, Directory]], base_path: str):
         """
@@ -178,8 +175,9 @@ class RemarkableAPI:
         filt_tree = []
         for item in tree:
             if isinstance(item, Directory):
-                filtered_children = self.filter_bookmarked(item.children)
-                if item.bookmarked or filtered_children:
+                if item.bookmarked:
+                    filt_tree.append(item)
+                elif filtered_children := self.filter_bookmarked(item.children):
                     item.children = filtered_children
                     filt_tree.append(item)
             elif isinstance(item, File) and item.bookmarked:
