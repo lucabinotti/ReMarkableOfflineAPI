@@ -91,4 +91,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Author
 
-**Luca Binotti**[GitHub Profile](https://github.com/lucabinotti)
+[Luca Binotti](https://github.com/lucabinotti)
