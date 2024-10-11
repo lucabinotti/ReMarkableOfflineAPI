@@ -36,8 +36,6 @@ You can clone the repository from GitHub and install it locally:
 
 ```sh
 git clone https://github.com/lucabinotti/ReMarkableOfflineAPI.git
-cd ReMarkableOfflineAPI
-pip install .
 ```
 
 ## Usage
