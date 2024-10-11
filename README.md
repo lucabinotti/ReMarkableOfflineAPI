@@ -26,7 +26,7 @@ To use this library, you need:
 
 To connect the tablet to your computer, the **USB Web Interface** must be enabled. You can do this by following the steps from the official reMarkable documentation:
 
-[Enable USB Web Interface on reMarkable Tablet](https://support.remarkable.com/hc/en-us/articles/360003860678-Accessing-your-reMarkable-with-SSH)
+[How to enable USB transfer on your reMarkable](https://support.remarkable.com/s/article/importing-and-exporting-files)
 
 After enabling USB Web Interface, the tablet will be accessible at `http://10.11.99.1` when connected via USB.
 
@@ -54,9 +54,6 @@ rm = RemarkableAPI()
 # Wait for the device to connect
 rm.wait_device_connection()
 
-# Wait for the device to connect
-rm.wait_device_connection()
-
 # Sync the file system
 rm.sync_file_system()
 
@@ -79,6 +76,9 @@ if rm.is_device_connected():
     # Download only bookmarked files that have been modified since the last backup
     base_path = "/path/to/save/files"
     rm.download_changes(base_path, filter_fn=filters.bookmarked)
+
+    # Save the session state to ensure the latest changes are tracked for future runs
+    rm.save_session()
 else:
     print("Device is not connected.")
 ```
@@ -92,4 +92,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author
 
 **Luca Binotti**[GitHub Profile](https://github.com/lucabinotti)
-
