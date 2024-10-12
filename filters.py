@@ -1,5 +1,5 @@
 from typing import Union
-from backup_locally_CLI import File, Directory
+from .models import File, Directory
 
 
 def bookmarked(item: Union[File, Directory]) -> bool:
