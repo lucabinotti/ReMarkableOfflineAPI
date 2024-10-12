@@ -14,6 +14,7 @@ Exports:
 """
 
 __author__ = "Luca Binotti"
+__version__ = "1.0.0"
 
 from .api import RemarkableAPI
 from .models import File, Directory
